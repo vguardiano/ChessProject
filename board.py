@@ -88,9 +88,7 @@ class Board:
         self.board[start[0]][start[1]].col = end[1]
         self.board[end[0]][end[1]] = self.board[start[0]][start[1]]
         self.board[start[0]][start[1]] = "*"
-        # pygame.draw.rect(windown, (255,127,80), (64 * start[0], 64 * start[1], 64, 64))
-        # pygame.draw.rect(windown, (255,127,80), (64 * end[0], 64 * end[1], 64, 64))
-
+        
     def boardCoordinates(self, position):
         boardYCoordinates = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
         if not self.flipped:
