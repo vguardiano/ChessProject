@@ -45,6 +45,15 @@ class Board:
         # self.board[3][1] = Knight(3,1,"white")
         # self.board[4][5] = Bishop(4,5,"black")
 
+    def drawBoard(self):
+        for row in range(self.rows):
+            for col in range(self.cols):
+                if self.board[row][col] != "*":
+                    print(self.board[row][col].rank[0], end=" ")
+                else:
+                    print("*", end=" ")
+            print()
+
     def drawPieces(self, windown):
         for row in range(self.rows):
             for col in range(self.cols):
@@ -61,29 +70,33 @@ class Board:
             self.board[row][col].selected = True
 
     def drawMoves(self, row, col, windown):
-        if self.board[row][col] != "*":
-            moves = self.board[row][col].validMoves(self)
-            for move in moves:
-                colorDiff = -100 * ((move[0] + move[1]) % 2)
-                if self.board[move[0]][move[1]] != "*":
-                    if(self.board[move[0]][move[1]].color != self.board[row][col].color):
-                        squareColor = (255 + colorDiff, 0, 0);
-                else:
-                    squareColor = (0, 255 + colorDiff, 0)
-                pygame.draw.rect(windown, squareColor, (move[1] * 64, move[0] * 64, 64, 64))
-                pygame.draw.rect(windown, (25, 86, 12), (col * 64, row * 64, 64, 64), 3)
+        if legalCoord(row, 8) and legalCoord(col, 8):
+            if self.board[row][col] != "*":
+                moves = self.board[row][col].validMoves(self)
+                for move in moves:
+                    colorDiff = -100 * ((move[0] + move[1]) % 2)
+                    if self.board[move[0]][move[1]] != "*":
+                        if(self.board[move[0]][move[1]].color != self.board[row][col].color):
+                            squareColor = (255 + colorDiff, 0, 0);
+                    else:
+                        squareColor = (0, 255 + colorDiff, 0)
+                    pygame.draw.rect(windown, squareColor, (move[1] * 64, move[0] * 64, 64, 64))
+                    pygame.draw.rect(windown, (25, 86, 12), (col * 64, row * 64, 64, 64), 3)
 
-    def movePiece(self, start, end):
-        self.board[end[1]][end[0]] = self.board[start[1]][start[0]]
-        self.board[start[1]][start[0]] = "*"
-        removed = self.board[end[1]][end[0]]
-            ### PAINT LAST SQUARE - To Do
-        return removed
+    def movePiece(self, start, end, windown):
+        self.board[start[0]][start[1]].row = end[0]
+        self.board[start[0]][start[1]].col = end[1]
+        self.board[end[0]][end[1]] = self.board[start[0]][start[1]]
+        self.board[start[0]][start[1]] = "*"
+        # pygame.draw.rect(windown, (255,127,80), (64 * start[0], 64 * start[1], 64, 64))
+        # pygame.draw.rect(windown, (255,127,80), (64 * end[0], 64 * end[1], 64, 64))
 
     def boardCoordinates(self, position):
         boardYCoordinates = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-        if not self.flipped: return boardYCoordinates[7 - position[1]]+str(position[0] + 1)
-        else: return boardYCoordinates[position[1]]+str(8 - position[0])
+        if not self.flipped:
+            return boardYCoordinates[7 - position[1]]+str(position[0] + 1)
+        else:
+            return boardYCoordinates[position[1]]+str(8 - position[0])
 
     def flipBoard(self):
         self.flipped = (1 + self.flipped) % 2

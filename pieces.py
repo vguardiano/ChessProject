@@ -7,17 +7,17 @@ def legalCoord(x, bdSize):
     else:
         return False
 
-def lineMoviments(row, col, board):
+def lineMoviments(self, board):
     increment = 1
     moves = []
     for orientation in [-1, 1]:
         while increment <= 8:
-            if legalCoord(row + orientation * increment, 8):
-                if board[row + orientation * increment][col] == "*":
-                    moves.append((row + orientation * increment, col))
+            if legalCoord(self.row + orientation * increment, 8):
+                if board[self.row + orientation * increment][self.col] == "*":
+                    moves.append((self.row + orientation * increment, self.col))
                 else:
-                    if board[row + orientation * increment][col].color != self.color:
-                        moves.append((row + orientation * increment, col))
+                    if board[self.row + orientation * increment][self.col].color != self.color:
+                        moves.append((self.row + orientation * increment, self.col))
                         break
                     else:
                         break
@@ -25,12 +25,12 @@ def lineMoviments(row, col, board):
         increment = 1
 
         while increment <= 8:
-            if legalCoord(col + orientation * increment, 8):
-                if board[row][col + orientation * increment] == "*":
-                    moves.append((row, col + orientation * increment))
+            if legalCoord(self.col + orientation * increment, 8):
+                if board[self.row][self.col + orientation * increment] == "*":
+                    moves.append((self.row, self.col + orientation * increment))
                 else:
-                    if board[row][col + orientation * increment].color != self.color:
-                        moves.append((row, col + orientation * increment))
+                    if board[self.row][self.col + orientation * increment].color != self.color:
+                        moves.append((self.row, self.col + orientation * increment))
                         break
                     else:
                         break
@@ -39,17 +39,17 @@ def lineMoviments(row, col, board):
 
     return moves
 
-def diagonalMoviments(row, col, board):
+def diagonalMoviments(self, board):
     increment = 1
     moves = []
     for orientation in [-1, 1]:
         while increment <= 8:
-            if legalCoord(row + orientation * increment, 8) and legalCoord(col + orientation * increment, 8):
-                if board[row + orientation * increment][col + orientation * increment] == "*":
-                    moves.append((row + orientation * increment, col + orientation * increment))
+            if legalCoord(self.row + orientation * increment, 8) and legalCoord(self.col + orientation * increment, 8):
+                if board[self.row + orientation * increment][self.col + orientation * increment] == "*":
+                    moves.append((self.row + orientation * increment, self.col + orientation * increment))
                 else:
-                    if board[row + orientation * increment][col + orientation * increment].color != self.color:
-                        moves.append((row + orientation * increment, col + orientation * increment))
+                    if board[self.row + orientation * increment][self.col + orientation * increment].color != self.color:
+                        moves.append((self.row + orientation * increment, self.col + orientation * increment))
                         break
                     else:
                         break
@@ -57,12 +57,12 @@ def diagonalMoviments(row, col, board):
         increment = 1
 
         while increment <= 8:
-            if legalCoord(row + orientation * increment, 8) and legalCoord(col - orientation * increment, 8):
-                if board[row + orientation * increment][col - orientation * increment] == "*":
-                    moves.append((row + orientation * increment, col - orientation * increment))
+            if legalCoord(self.row + orientation * increment, 8) and legalCoord(self.col - orientation * increment, 8):
+                if board[self.row + orientation * increment][self.col - orientation * increment] == "*":
+                    moves.append((self.row + orientation * increment, self.col - orientation * increment))
                 else:
-                    if board[row + orientation * increment][col - orientation * increment].color != self.color:
-                        moves.append((row + orientation * increment, col - orientation * increment))
+                    if board[self.row + orientation * increment][self.col - orientation * increment].color != self.color:
+                        moves.append((self.row + orientation * increment, self.col - orientation * increment))
                         break
                     else:
                         break
@@ -155,7 +155,7 @@ class Rook(Pieces):
     image_index = 4
 
     def validMoves(self, Board):
-        return lineMoviments(self.row, self.col, Board.board)
+        return lineMoviments(self, Board.board)
 
 class Knight(Pieces):
     rank = "Knight"
@@ -180,14 +180,14 @@ class Bishop(Pieces):
     image_index = 2
 
     def validMoves(self, Board):
-        return diagonalMoviments(self.row, self.col, Board.board)
+        return diagonalMoviments(self, Board.board)
 
 class Queen(Pieces):
     rank = "Queen"
     image_index = 1
 
     def validMoves(self, Board):
-        return lineMoviments(self.row, self.col, Board.board) + diagonalMoviments(self.row, self.col, Board.board)
+        return lineMoviments(self, Board.board) + diagonalMoviments(self, Board.board)
 
 class King(Pieces):
     rank = "King"

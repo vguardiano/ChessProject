@@ -8,7 +8,7 @@ width = 512
 height = 512
 isFlipped = 0
 
-selectedPiece = (0, 0)
+selectedPiece = (-1, -1)
 lastPieceMove = (0, 0)
 validMoves = []
 
@@ -35,9 +35,10 @@ def mouse2grid(position):
     return (int(position[0]/64), int(position[1]/64))
 
 def main():
-    global selectedPiece, isFlipped
+    global selectedPiece, validMoves, lastPieceMove
     clock = pygame.time.Clock()
     run = True
+    board.flipBoard()
 
     while run:
         redraw_gamewindow()
@@ -56,6 +57,8 @@ def main():
                 if event.key == pygame.K_r:
                     main()
                 if event.key == pygame.K_f:
+                    selectedPiece = (-1, -1)
+                    validMoves = []
                     board.flipBoard()
 
             if event.type == pygame.MOUSEMOTION:
@@ -63,10 +66,23 @@ def main():
 
             if event.type ==  pygame.MOUSEBUTTONDOWN:
                 (x, y) = mouse2grid(pygame.mouse.get_pos())
-                if board.board[y][x] != "*":
-                    board.selectPiece(y, x)
-                    selectedPiece = (y, x)
-                    print("Selected a {} {} at ({}, {}) or {}".format(board.board[y][x].color, board.board[y][x].rank, y, x, board.boardCoordinates((y, x))))
+                if (y, x) in validMoves:
+                    print("Start: {}, End: {}".format(selectedPiece, (y, x)))
+                    board.movePiece(selectedPiece, (y, x), windown)
+                    pygame.draw.rect(windown, (255, 127, 80), (selectedPiece[0] * 64, selectedPiece[1] * 64, 64, 64), 3)
+                    pygame.draw.rect(windown, (255, 127, 80), (y * 64, x * 64, 64, 64), 3)
+                    validMoves = []
+                    selectedPiece = (-1, -1)
                 else:
-                    print("Blank square at ({}, {}) or {}".format(y, x, board.boardCoordinates((y, x))))
+                    if board.board[y][x] != "*":
+                        board.selectPiece(y, x)
+                        selectedPiece = (y, x)
+                        validMoves = board.board[y][x].validMoves(board)
+                        print("Selected a {} {} at ({}, {}) or {}".format(board.board[y][x].color, board.board[y][x].rank, y, x, board.boardCoordinates((y, x))))
+                    else:
+                        validMoves = []
+                        selectedPiece = (-1, -1)
+                        print("Blank square at ({}, {}) or {}".format(y, x, board.boardCoordinates((y, x))))
+                # board.drawBoard()
+
 main()
