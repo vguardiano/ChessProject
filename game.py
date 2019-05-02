@@ -26,6 +26,8 @@ def redraw_gamewindow():
 def mouse2grid(position):
     return (int(position[0] / 64), int(position[1] / 64))
 
+board.flipBoard()
+
 def main():
     global windown, board, selectedPiece, lastPieceMove
 
@@ -34,7 +36,6 @@ def main():
     turn = "white"
     run = True
 
-    board.flipBoard()
     print("{}'s turn to move.".format(turn.capitalize()))
 
     while run:
@@ -53,10 +54,14 @@ def main():
                     quit()
 
                 if event.key == pygame.K_r:
-                    main()
+                    if board.flipped != 1:
+                        board.flipBoard()
+                    board = Board(8, 8)
+                    turn = "white"
 
                 if event.key == pygame.K_k:
                     flipEveryMove = (1 + flipEveryMove) % 2
+                    if
 
                 if event.key == pygame.K_f:
                     selectedPiece = (-1, -1)
