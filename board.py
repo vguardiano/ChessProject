@@ -72,8 +72,7 @@ class Board:
     def drawMoves(self, row, col, windown):
         if legalCoord(row, 8) and legalCoord(col, 8):
             if self.board[row][col] != "*":
-                moves = self.board[row][col].validMoves(self)
-                for move in moves:
+                for move in self.board[row][col].validMoves(self):
                     colorDiff = -100 * ((move[0] + move[1]) % 2)
                     if self.board[move[0]][move[1]] != "*":
                         if(self.board[move[0]][move[1]].color != self.board[row][col].color):
@@ -81,14 +80,14 @@ class Board:
                     else:
                         squareColor = (0, 255 + colorDiff, 0)
                     pygame.draw.rect(windown, squareColor, (move[1] * 64, move[0] * 64, 64, 64))
-                    pygame.draw.rect(windown, (25, 86, 12), (col * 64, row * 64, 64, 64), 3)
+                    pygame.draw.rect(windown, (35, 58, 34), (col * 64, row * 64, 64, 64))
 
     def movePiece(self, start, end, windown):
         self.board[start[0]][start[1]].row = end[0]
         self.board[start[0]][start[1]].col = end[1]
         self.board[end[0]][end[1]] = self.board[start[0]][start[1]]
         self.board[start[0]][start[1]] = "*"
-        
+
     def boardCoordinates(self, position):
         boardYCoordinates = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
         if not self.flipped:
