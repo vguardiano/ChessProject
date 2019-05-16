@@ -89,7 +89,7 @@ class Board:
         self.board[start[0]][start[1]] = "*"
 
     def boardCoordinates(self, position):
-        boardYCoordinates = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+        boardYCoordinates = ['a','b','c','d','e','f','g','h']
         if not self.flipped:
             return boardYCoordinates[7 - position[1]]+str(position[0] + 1)
         else:
@@ -98,9 +98,9 @@ class Board:
     def flipBoard(self):
         self.flipped = (1 + self.flipped) % 2
         if self.flipped:
-            print("Board is Flipped !!")
+            print("White Orientation.")
         else:
-            print("Board is not Flipped !!")
+            print("Black Orientation.")
         tempBoard = [['*'] * 8 for _ in range(8)]
         for row in range(8):
             for col in range(8):
